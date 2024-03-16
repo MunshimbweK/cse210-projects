@@ -10,7 +10,7 @@ class Program
         string userName = "";
 
         bool continuePlaying = true;  // the boolean value helps the user to opt out at any time during execution
-        while (continuePlaying)       // The menu bar in in a while loop, makes the application organized, smart and neat                             //presents the user with a choice of what to execute
+        while (continuePlaying)       // The menu bar in in a while loop, makes the application organized, smart and neat                             
         {  
             DisplayMenu();   
             
