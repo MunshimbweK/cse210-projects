@@ -1,9 +1,37 @@
 using System;
+namespace Journal
 
-class Program
+
 {
-    static void Main(string[] args)
+   class Journal
+   {
+    public void run()
     {
-        Console.WriteLine("Hello Develop02 World!");
+
     }
+
+    private void Write() {}
+    
+
+    private void Display() {}
+
+    private void DisplayIntro() {}
+
+    private void DisplayOutro() {}
+
+    private void Save(){}
+
+    private void Quit(){}
+
+    private void AddEntry(){}
+    
+    private void RandomPromptGenerator(){}
+
+
+
+
+
+
+
+   }
 }
