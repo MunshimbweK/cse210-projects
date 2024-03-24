@@ -2,20 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-class Entry
-{
-    public string Prompt { get; set; }
-    public string Response { get; set; }
-    public DateTime Timestamp { get; set; }
-
-    public Entry(string prompt, string response, DateTime timestamp)
-    {
-        Prompt = prompt;
-        Response = response;
-        Timestamp = timestamp;
-    }
-}
-
 class Journal
 {
     private List<Entry> entries = new List<Entry>();
@@ -28,13 +14,10 @@ class Journal
     public void DisplayJournal()
     {
         Console.WriteLine("Journal Entries:");
-        foreach (var entry in entries)
-        {
-            Console.WriteLine($"{entry.Timestamp}: {entry.Prompt} - {entry.Response}");
-        }
+        IterateEntries(entry => Console.WriteLine($"{entry.Timestamp},{entry.Prompt},{entry.Response}"));
     }
 
-    public void LoadJournal(string filename)
+    public void LoadJournalFromCSV(string filename)
     {
         try
         {
@@ -58,7 +41,46 @@ class Journal
         }
     }
 
-    // Implement methods for saving journal...
+    public void SaveJournalToCSV(string filename)
+    {
+        try
+        {
+            using (StreamWriter sw = new StreamWriter(filename))
+            {
+                foreach (var entry in entries)
+                {
+                    sw.WriteLine($"{entry.Prompt},{entry.Response},{entry.Timestamp}");
+                }
+            }
+            Console.WriteLine("Journal saved successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error saving journal: " + ex.Message);
+        }
+    }
+
+    public void IterateEntries(Action<Entry> action)
+    {
+        foreach (var entry in entries)
+        {
+            action(entry);
+        }
+    }
+}
+
+class Entry
+{
+    public string Prompt { get; set; }
+    public string Response { get; set; }
+    public DateTime Timestamp { get; set; }
+
+    public Entry(string prompt, string response, DateTime timestamp)
+    {
+        Prompt = prompt;
+        Response = response;
+        Timestamp = timestamp;
+    }
 }
 
 class Program
@@ -82,8 +104,9 @@ class Program
             Console.WriteLine("Menu:");
             Console.WriteLine("1. Write a new entry");
             Console.WriteLine("2. Display the journal");
-            Console.WriteLine("3. Load the journal from a file");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("3. Save the journal to a CSV file");
+            Console.WriteLine("4. Load the journal from a CSV file");
+            Console.WriteLine("5. Exit");
             Console.Write("Enter your choice: ");
 
             string choice = Console.ReadLine();
@@ -91,21 +114,22 @@ class Program
             switch (choice)
             {
                 case "1":
-                    // Write a new entry
                     WriteNewEntry(journal);
                     break;
                 case "2":
-                    // Display the journal
                     journal.DisplayJournal();
                     break;
                 case "3":
-                    // Load the journal from a file
-                    Console.Write("Enter the filename to load: ");
-                    string filename = Console.ReadLine();
-                    journal.LoadJournal(filename);
+                    Console.Write("Enter the filename to save: ");
+                    string saveFilename = Console.ReadLine();
+                    journal.SaveJournalToCSV(saveFilename);
                     break;
                 case "4":
-                    // Exit the program
+                    Console.Write("Enter the filename to load: ");
+                    string loadFilename = Console.ReadLine();
+                    journal.LoadJournalFromCSV(loadFilename);
+                    break;
+                case "5":
                     exit = true;
                     break;
                 default:
